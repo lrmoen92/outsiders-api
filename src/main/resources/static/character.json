@@ -1,0 +1,230 @@
+{
+  "id": 404,
+  "avatarUrl": "/assets/shinzo.png",
+  "name": "Shinzo Katetsu",
+  "description": "shinzoDesc",
+  "IAbilities": [
+    {
+      "id": 410,
+      "cooldown": 2,
+      "name": "Trident",
+      "abilityUrl": "/assets/shinzo1.png",
+      "description": "Shinzo brings the storm with his trident, doing 25 physical damage and 15 magical damage",
+      "position": 0,
+      "targets": "Enemy",
+      "types": "Physical, Magical, Damaging",
+      "aoe": false,
+      "self": false,
+      "ally": false,
+      "enemy": true,
+      "cost": [
+        "STRENGTH",
+        "ARCANA"
+      ],
+      "selfEffects": [],
+      "enemyEffects": [
+        {
+          "id": 413,
+          "name": "Trident",
+          "description": "Shinzo has dealt physical damage with his trident",
+          "avatarUrl": "/assets/shinzo1.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": true,
+          "magical": false,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "statMods": {
+            "DAMAGE": 25
+          }
+        },
+        {
+          "id": 414,
+          "name": "Trident",
+          "description": "Shinzo has dealt magical damage with his trident",
+          "avatarUrl": "/assets/shinzo1.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": false,
+          "magical": true,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "statMods": {
+            "DAMAGE": 15
+          }
+        }
+      ],
+      "aoeEnemyEffects": [],
+      "allyEffects": [],
+      "aoeAllyEffects": []
+    },
+    {
+      "id": 411,
+      "cooldown": 4,
+      "name": "Entangle",
+      "abilityUrl": "/assets/shinzo2.png",
+      "description": "Shinzo entangles an enemy doing 15 damage, and stunning them",
+      "position": 1,
+      "targets": "Enemy",
+      "types": "Magical, Damaging, Debuff",
+      "aoe": false,
+      "self": false,
+      "ally": false,
+      "enemy": true,
+      "cost": [
+        "DIVINITY"
+      ],
+      "selfEffects": [],
+      "enemyEffects": [
+        {
+          "id": 415,
+          "name": "Entangle",
+          "description": "This unit is taking 15 damage",
+          "avatarUrl": "/assets/shinzo2.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": false,
+          "magical": true,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "statMods": {
+            "DAMAGE": 15
+          }
+        },
+        {
+          "id": 416,
+          "name": "Entangle",
+          "description": "This unit is stunned",
+          "avatarUrl": "/assets/shinzo2.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": false,
+          "magical": true,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "quality": "STUNNED",
+          "statMods": {}
+        }
+      ],
+      "aoeEnemyEffects": [],
+      "allyEffects": [],
+      "aoeAllyEffects": []
+    },
+    {
+      "id": 412,
+      "cooldown": 4,
+      "name": "Channel Energy",
+      "abilityUrl": "/assets/shinzo3.png",
+      "description": "Shinzo calls upon his divine power and heals his party for 20 hp",
+      "position": 2,
+      "targets": "Self and Allies",
+      "types": "Magical",
+      "aoe": true,
+      "self": true,
+      "ally": true,
+      "enemy": false,
+      "cost": [
+        "DIVINITY",
+        "RANDOM"
+      ],
+      "selfEffects": [],
+      "enemyEffects": [],
+      "aoeEnemyEffects": [],
+      "allyEffects": [],
+      "aoeAllyEffects": [
+        {
+          "id": 417,
+          "name": "Channel Energy",
+          "description": "This unit is healing 20 HP",
+          "avatarUrl": "/assets/shinzo3.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": false,
+          "magical": true,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "statMods": {
+            "DAMAGE": -20
+          }
+        }
+      ]
+    },
+    {
+      "id": 413,
+      "cooldown": 4,
+      "name": "Captain\u0027s Orders",
+      "abilityUrl": "/assets/shinzo4.png",
+      "description": "Shinzo call\u0027s upon his status among the seas to become invulnerable this turn.",
+      "position": 3,
+      "targets": "Self",
+      "types": "Physical, Buff",
+      "aoe": false,
+      "self": true,
+      "ally": false,
+      "enemy": false,
+      "cost": [
+        "RANDOM"
+      ],
+      "selfEffects": [
+        {
+          "id": 418,
+          "name": "Captain\u0027s Orders",
+          "description": "Shinzo\u0027s the Captain.  He\u0027s invulnerable this turn.",
+          "avatarUrl": "/assets/shinzo4.png",
+          "duration": 1,
+          "interruptable": false,
+          "physical": true,
+          "magical": false,
+          "affliction": false,
+          "conditional": false,
+          "visible": true,
+          "stacks": false,
+          "instanceId": 0,
+          "groupId": 0,
+          "originCharacter": 0,
+          "targetCharacter": 0,
+          "quality": "INVULNERABLE",
+          "statMods": {}
+        }
+      ],
+      "enemyEffects": [],
+      "aoeEnemyEffects": [],
+      "allyEffects": [],
+      "aoeAllyEffects": []
+    }
+  ],
+  "factions": [
+    "SHINZO",
+    "OUTSIDERS"
+  ]
+}

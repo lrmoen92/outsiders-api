@@ -1,0 +1,32 @@
+{
+  "id": 352,
+  "avatarUrl": "https://i.imgur.com/x8VwSea.png",
+  "level": 1,
+  "xp": 0,
+  "displayName": "Red",
+  "credentials": {
+    "id": 352,
+    "email": "Red@Red.com",
+    "password": "red"
+  },
+  "missionProgress": [
+    {
+      "id": 352,
+      "missionId": 0,
+      "requirements": []
+    }
+  ],
+  "missionIdsCompleted": [
+    0
+  ],
+  "characterIdsUnlocked": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "ICombatants": []
+}

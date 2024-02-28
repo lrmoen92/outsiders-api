@@ -1,0 +1,35 @@
+{
+  "id": 353,
+  "name": "Walls Come Tumbling Down",
+  "description": "Drundar is tearing down the place, no choice but to fight!",
+  "avatarUrl": "/assets/drundar.png",
+  "minmumLevel": 6,
+  "prerequisiteMissionId": 0,
+  "characterIdUnlocked": 7,
+  "requirements": [
+    {
+      "id": 354,
+      "amount": 3,
+      "userFaction": "TRISTANE",
+      "targetFaction": "ANYONE"
+    },
+    {
+      "id": 355,
+      "amount": 3,
+      "userFaction": "GEDDY",
+      "targetFaction": "ANYONE"
+    },
+    {
+      "id": 356,
+      "amount": 3,
+      "userFaction": "ALEX",
+      "targetFaction": "ANYONE"
+    },
+    {
+      "id": 357,
+      "amount": 3,
+      "userFaction": "SHINZO",
+      "targetFaction": "ANYONE"
+    }
+  ]
+}
