@@ -24,6 +24,7 @@ public class MissionProgress extends JsonObject {
     @JsonIgnore
     private Player Player;
 
+    //TODO: change this to mission
     private int missionId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "MissionProgress", orphanRemoval = true, fetch = FetchType.EAGER)

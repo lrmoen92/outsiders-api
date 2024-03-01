@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 public class BattleService implements IBattleService {
 	private final BattleRepository repo;
 	private final IPlayerService IPlayerService;
@@ -86,15 +85,34 @@ public class BattleService implements IBattleService {
 		this.repo.deleteById(id);
 	}
 
+	@Transactional
 	public void delete(Battle entity) {
+
+		removePlayers(entity);
 		this.repo.delete(entity);
+	}
+
+	@Transactional
+	protected void removePlayers(Battle battle) {
+		battle.removePlayers();
+		this.repo.save(battle);
 	}
 
 	public void deleteAll(Iterable<Battle> entities) {
 		this.repo.deleteAll(entities);
 	}
 
+	@Transactional
 	public void deleteAll() {
+		this.removeAllPlayers();
 		this.repo.deleteAll();
+	}
+
+	@Transactional
+	protected void removeAllPlayers() {
+		this.repo.findAll().forEach(battle -> {
+			battle.removePlayers();
+			this.repo.save(battle);
+		});
 	}
 }

@@ -70,7 +70,8 @@ public class Player extends JsonObject {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Player", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Combatant> Combatants = new ArrayList<>();
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    // TODO: remove persist?
+    @ManyToOne
     @JsonIgnore
     private Battle Battle;
 

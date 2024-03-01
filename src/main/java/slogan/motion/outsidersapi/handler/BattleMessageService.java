@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
+import jakarta.transaction.Transactional;
 import slogan.motion.outsidersapi.domain.constant.Energy;
 import slogan.motion.outsidersapi.domain.constant.Quality;
 import slogan.motion.outsidersapi.domain.constant.Stat;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class BattleMessageService {
 
 	@Autowired
@@ -67,10 +69,9 @@ public class BattleMessageService {
 		JavaType javaType = typeFactory.constructParametricType(WebSocketDTO.class, clazz);
 		return objectMapper.convertValue(input, javaType);
 	}
-	public String handleMatchmakingMessage(Map valueMap) throws JsonProcessingException {
 
-		// TODO: implement MatchMakingDTO
-		WebSocketDTO<MatchMakingDTO> matchMakingDTO = readMapAs(valueMap, MatchMakingDTO.class);
+	public String handleMatchmakingMessage(WebSocketDTO<MatchMakingDTO> matchMakingDTO) {
+
 		Integer characterId1 = matchMakingDTO.getDto().getChar1();
 		Integer characterId2 = matchMakingDTO.getDto().getChar2();
 		Integer characterId3 = matchMakingDTO.getDto().getChar3();
@@ -97,7 +98,7 @@ public class BattleMessageService {
 			battle.setPlayerOne(player);
 
 			Battle savedBattle = this.IBattleService.save(battle);
-			return objectMapper.writeValueAsString("WAITING FOR OPPONENTS");
+			return "WAITING FOR OPPONENTS";
 		} else {
 			Combatant i1 = new Combatant(ICharacterService.findById(characterId1), playerId);
 			Combatant i2 = new Combatant(ICharacterService.findById(characterId2), playerId);
@@ -129,11 +130,7 @@ public class BattleMessageService {
 		}
 	}
 
-	public String handleEnergyTradeMessage(Map valueMap) {
-//		LOG.info("Energy Trade");
-		// TODO:
-		// this can be cleaned up with object mapper
-		WebSocketDTO<EnergyTradeDTO> energyTradeDTO = readMapAs(valueMap, EnergyTradeDTO.class);
+	public String handleEnergyTradeMessage(WebSocketDTO<EnergyTradeDTO> energyTradeDTO) {
 		int playerId = energyTradeDTO.getPlayerId();
 		Integer arenaId = energyTradeDTO.getArenaId();
 		Battle b = IBattleService.getByArenaId(arenaId);
@@ -163,9 +160,7 @@ public class BattleMessageService {
 		return "{\"type\": \"ETRADE\", \"playerId\": " + playerId + ", \"battle\": " + b.json() + "}";
 	}
 
-	public String handleTurnEndMessage(Map valueMap) throws Exception {
-//		LOG.info("Turn End");
-		WebSocketDTO<TurnEndDTO> turnEndDTO = readMapAs(valueMap, TurnEndDTO.class);
+	public String handleTurnEndMessage(WebSocketDTO<TurnEndDTO> turnEndDTO) throws Exception {
 		Integer playerId = turnEndDTO.getPlayerId();
 		Integer arenaId = turnEndDTO.getArenaId();
 		Battle b = IBattleService.getByArenaId(arenaId);
@@ -182,9 +177,7 @@ public class BattleMessageService {
 		return "{\"type\": \"END\", \"isPlayerOne\": " + isPlayerOne + ", \"battle\": " + bPost.json() + "}";
 	}
 
-	public String handleTargetCheckMessage(Map valueMap) {
-//		LOG.info("Target Check");
-		WebSocketDTO<TargetCheckDTO> targetCheckDTO = readMapAs(valueMap, TargetCheckDTO.class);
+	public String handleTargetCheckMessage(WebSocketDTO<TargetCheckDTO> targetCheckDTO) {
 		int playerId = targetCheckDTO.getPlayerId();
 		int arenaId = targetCheckDTO.getArenaId();
 		Battle b = IBattleService.getByArenaId(arenaId);
@@ -278,9 +271,7 @@ public class BattleMessageService {
 		return "{\"type\": \"TCHECK\", \"playerId\": " + playerId + ", \"dto\": " + dto.json() + "}";
 	}
 
-	public String handleCostCheckMessage(Map valueMap) throws JsonProcessingException {
-
-		WebSocketDTO<CostCheckDTO> energyTradeDTO = readMapAs(valueMap, CostCheckDTO.class);
+	public String handleCostCheckMessage(WebSocketDTO<CostCheckDTO> energyTradeDTO) throws JsonProcessingException {
 		// respond with an array of the abilities that CAN be cast
 		// currently responding with all
 		Integer[] a = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
@@ -401,9 +392,7 @@ public class BattleMessageService {
 //		LOG.info(responseJson.toString());
 	}
 
-	public String handleGameEndMessage(Map valueMap) {
-
-		WebSocketDTO<GameEndDTO> gameEndDTO = readMapAs(valueMap, GameEndDTO.class);
+	public String handleGameEndMessage(WebSocketDTO<GameEndDTO> gameEndDTO) {
 
 		Integer loserId = gameEndDTO.getDto().getLoserId();
 		Integer winnerId = gameEndDTO.getDto().getWinnerId();

@@ -1,7 +1,9 @@
 
 package slogan.motion.outsidersapi.handler;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
-import slogan.motion.outsidersapi.domain.dto.CostCheckDTO;
+import slogan.motion.outsidersapi.domain.dto.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -40,9 +42,6 @@ extends SocketHandler {
     }
 
     public void processMessage(WebSocketSession session, TextMessage message) throws Exception {
-//		LOG.info("Literally Anything");
-//		LOG.info(message.toString());
-//		LOG.info(message.getPayload());
 		
 		// map representing json sent in
 		Map m = new Gson().fromJson(message.getPayload(), Map.class);
@@ -63,7 +62,7 @@ extends SocketHandler {
 	    }
 	}
     
-    public synchronized void trySend(WebSocketSession s, WebSocketMessage msg) throws IOException, InterruptedException {
+    public synchronized void trySend(WebSocketSession s, WebSocketMessage msg) {
 		try {
 			synchronized(s) {
 	    		s.sendMessage(msg);
@@ -73,50 +72,47 @@ extends SocketHandler {
 		}
     }
 
-	private String mapToString(Map<Object, Object> valueMap) {
-		StringBuilder sb = new StringBuilder();
-		for (Map.Entry entry : valueMap.entrySet()) {
-			sb.append("\"" + entry.getKey().toString() + "\": \"" + entry.getValue().toString() + "\",");
-		}
-		return sb.toString();
-	}
-
     public String processMapEntry(Map valueMap) throws Exception {
     	String type = valueMap.get("type").toString();
     	LOG.info("=== Incoming " + type + " Message");
 
-    	String responseJson = "{}";
-		switch (type) {
-		    case "MATCH_MAKING":
-
-//				objectMapper.convertValue(valueMap, MatchMakingDTO.class);
-//		      LOG.info("Match Making...");
-		      responseJson = this.battleMessageService.handleMatchmakingMessage(valueMap);
-		    case "COST_CHECK":
-//				CostCheckDTO dto = objectMapper.convertValue(valueMap, CostCheckDTO.class);
-//		      LOG.info("Cost Check");
-		      responseJson = this.battleMessageService.handleCostCheckMessage(valueMap);
-		    case "TARGET_CHECK":
-//				objectMapper.convertValue(valueMap, TargetCheckDTO.class);
-//		      LOG.info("Target Check");
-		      responseJson = this.battleMessageService.handleTargetCheckMessage(valueMap);
-		    case "TURN_END":
-//				objectMapper.convertValue(valueMap, TurnEndDTO.class);
-//		      LOG.info("Turn End");
-		      responseJson = this.battleMessageService.handleTurnEndMessage(valueMap);
-    	  	case "ENERGY_TRADE":
-//				objectMapper.convertValue(valueMap, EnergyTradeDTO.class);
-//		      LOG.info("Energy Trade");
-		      responseJson = this.battleMessageService.handleEnergyTradeMessage(valueMap);
-    	  	case "GAME_END":
-//				objectMapper.convertValue(valueMap, GameEndDTO.class);
-//		      LOG.info("Game End");
-		      responseJson = this.battleMessageService.handleGameEndMessage(valueMap);
-	    } 
+    	String responseJson = switch (type) {
+            case "MATCH_MAKING" -> {
+				WebSocketDTO<MatchMakingDTO> dto = readMapAs(valueMap, MatchMakingDTO.class);
+				yield this.battleMessageService.handleMatchmakingMessage(dto);
+			}
+            case "COST_CHECK" -> {
+				WebSocketDTO<CostCheckDTO> dto = readMapAs(valueMap, CostCheckDTO.class);
+				yield this.battleMessageService.handleCostCheckMessage(dto);
+			}
+            case "TARGET_CHECK" -> {
+				WebSocketDTO<TargetCheckDTO> dto = readMapAs(valueMap, TargetCheckDTO.class);
+				yield this.battleMessageService.handleTargetCheckMessage(dto);
+			}
+            case "TURN_END" -> {
+				WebSocketDTO<TurnEndDTO> dto = readMapAs(valueMap, TurnEndDTO.class);
+				yield this.battleMessageService.handleTurnEndMessage(dto);
+			}
+            case "ENERGY_TRADE" -> {
+				WebSocketDTO<EnergyTradeDTO> dto = readMapAs(valueMap, EnergyTradeDTO.class);
+				yield this.battleMessageService.handleEnergyTradeMessage(dto);
+			}
+            case "GAME_END" -> {
+				WebSocketDTO<GameEndDTO> dto = readMapAs(valueMap, GameEndDTO.class);
+				yield this.battleMessageService.handleGameEndMessage(dto);
+			}
+            default -> "{}";
+        };
 
         LOG.info("<<< RESPONSE: " + responseJson);
         return responseJson;
     }
+
+	private <T> WebSocketDTO<T> readMapAs(Map input, Class<T> clazz) {
+		TypeFactory typeFactory = objectMapper.getTypeFactory();
+		JavaType javaType = typeFactory.constructParametricType(WebSocketDTO.class, clazz);
+		return objectMapper.convertValue(input, javaType);
+	}
 
     public TextMessage createTextMessage(Map valueMap) throws Exception {
     	String res = this.processMapEntry(valueMap);

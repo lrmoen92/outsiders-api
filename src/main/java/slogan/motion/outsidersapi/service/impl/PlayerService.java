@@ -1,5 +1,6 @@
 package slogan.motion.outsidersapi.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import static slogan.motion.outsidersapi.util.NRG.isNullOrEmpty;
 
 @Slf4j
 @Service
+@Transactional
 public class PlayerService implements IPlayerService {
     @Autowired
     private PlayerRepository repo;
@@ -28,7 +30,7 @@ public class PlayerService implements IPlayerService {
                 log.info("Saved new Player: {}", savedPlayer);
                 return savedPlayer;
             } else {
-                return entity;
+                return player.get(0);
             }
         } else {
             throw new RuntimeException("Attempted to update an existing Player");
@@ -52,14 +54,12 @@ public class PlayerService implements IPlayerService {
     }
 
     public Player findByDisplayName(String name) {
-        for (Player p : repo.findAll()) {
-            if (!isNullOrEmpty(p.getDisplayName())) {
-                if (p.getDisplayName().equals(name)) {
-                    return p;
-                }
-            }
+        List<Player> list = repo.findAllByDisplayName(name);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
         }
-        return null;
     }
 
     public Iterable<Player> saveAll(Iterable<Player> entities) {

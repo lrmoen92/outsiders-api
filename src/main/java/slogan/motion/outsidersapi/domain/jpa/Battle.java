@@ -30,7 +30,7 @@ public class Battle extends JsonObject {
     private int turn = 0;
     private int arenaId;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "Battle", fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "Battle", fetch = FetchType.EAGER)
     private List<Player> players = new ArrayList<>();
 
     @JsonGetter
@@ -150,5 +150,13 @@ public class Battle extends JsonObject {
     public void setPlayerTwo(Player player) {
         this.players.add(1, player);
         player.setBattle(this);
+    }
+
+    public void removePlayers() {
+         Player playerTwo = players.remove(1);
+         Player playerOne = players.remove(0);
+
+         playerTwo.setBattle(null);
+         playerOne.setBattle(null);
     }
 }

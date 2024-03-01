@@ -39,13 +39,6 @@ public class Character extends JsonObject {
 
     public void addIAbility(Ability g) {
         IAbilities.add(g);
-//        // TODO:  look at this for creation vs update
-//        g.setId(0);
-//        g.getEnemyEffects().forEach(e -> e.setId(0));
-//        g.getAllyEffects().forEach(e -> e.setId(0));
-//        g.getAoeAllyEffects().forEach(e -> e.setId(0));
-//        g.getAoeEnemyEffects().forEach(e -> e.setId(0));
-//        g.getSelfEffects().forEach(e -> e.setId(0));
         g.setCharacter(this);
     }
 

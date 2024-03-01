@@ -21,6 +21,12 @@ public class SeedBattleData {
     private ICharacterService characterService;
 
     @Transactional
+    protected void deleteBattles() {
+        // delete all battles on startup is default behavior
+        IBattleService.deleteAll();
+    }
+
+    @Transactional
     protected String makeBattle(Player red, Player blue) {
         int arenaId = 1;
         String queue = "QUICK";

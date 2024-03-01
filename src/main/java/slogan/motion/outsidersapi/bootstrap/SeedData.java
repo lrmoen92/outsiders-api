@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import slogan.motion.outsidersapi.domain.jpa.Player;
+import slogan.motion.outsidersapi.repository.BattleRepository;
 import slogan.motion.outsidersapi.service.IBattleService;
 import slogan.motion.outsidersapi.service.ICharacterService;
 import slogan.motion.outsidersapi.service.IMissionService;
@@ -35,17 +37,17 @@ public class SeedData implements CommandLineRunner {
     @Autowired
     private SeedBattleData seedBattleData;
 
+    @Autowired
+    private BattleRepository battleRepository;
+
     public void run(String... args) {
         log.info("--START--");
-        deleteBattles();
+        seedBattleData.deleteBattles();
         tryToSeed();
         log.info("--COMPLETE--");
     }
 
-    protected void deleteBattles() {
-        // delete all battles on startup is default behavior
-        IBattleService.deleteAll();
-    }
+
 
     public void tryToSeed() {
         try {
