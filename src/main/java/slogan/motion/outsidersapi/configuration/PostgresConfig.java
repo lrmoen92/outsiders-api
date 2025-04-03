@@ -2,12 +2,9 @@ package slogan.motion.outsidersapi.configuration;
 
 import org.springframework.context.annotation.Configuration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-
 @Configuration
 public class PostgresConfig {
-	
+
 //	PostgresConfig() {
 //	    Connection c = null;
 //	    try {

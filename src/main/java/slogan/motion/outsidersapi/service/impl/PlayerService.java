@@ -11,8 +11,6 @@ import slogan.motion.outsidersapi.service.IPlayerService;
 import java.util.List;
 import java.util.Optional;
 
-import static slogan.motion.outsidersapi.util.NRG.isNullOrEmpty;
-
 @Slf4j
 @Service
 @Transactional
@@ -24,10 +22,9 @@ public class PlayerService implements IPlayerService {
         if (entity.getId() == 0) {
             // save only if it doesn't exist
             List<Player> player = repo.findAllByDisplayName(entity.getDisplayName());
-            log.info("");
             if (player.isEmpty()) {
                 Player savedPlayer = repo.save(entity);
-                log.info("Saved new Player: {}", savedPlayer);
+                log.info("------==SAVE |PLA:{}", savedPlayer);
                 return savedPlayer;
             } else {
                 return player.get(0);

@@ -14,9 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TargetCheckDTO extends JsonObject {
-	
-	// all positional
-	Ability ability;
-	Integer characterPosition;
-	List<Integer> targetPositions;
+
+    // all positional
+    Ability ability;
+    Integer characterPosition;
+    List<Integer> targetPositions;
 }

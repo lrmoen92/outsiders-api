@@ -1,11 +1,8 @@
 package slogan.motion.outsidersapi.handler;
 
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -13,8 +10,7 @@ import java.util.Map;
 
 @Service
 public class GlobalSocketHandler
-extends SocketHandler {
-    public static Logger LOG = LoggerFactory.getLogger(GlobalSocketHandler.class);
+        extends SocketHandler {
 
     public void processMessage(WebSocketSession webSocketSession, TextMessage message) throws IOException {
         Map valueMap = new Gson().fromJson(message.getPayload(), Map.class);

@@ -1,13 +1,10 @@
 package slogan.motion.outsidersapi.bootstrap;
 
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import slogan.motion.outsidersapi.domain.jpa.Player;
-import slogan.motion.outsidersapi.repository.BattleRepository;
 import slogan.motion.outsidersapi.service.IBattleService;
 import slogan.motion.outsidersapi.service.ICharacterService;
 import slogan.motion.outsidersapi.service.IMissionService;
@@ -37,16 +34,12 @@ public class SeedData implements CommandLineRunner {
     @Autowired
     private SeedBattleData seedBattleData;
 
-    @Autowired
-    private BattleRepository battleRepository;
-
     public void run(String... args) {
-        log.info("--START--");
+        log.debug("------==START");
         seedBattleData.deleteBattles();
         tryToSeed();
-        log.info("--COMPLETE--");
+        log.debug("------==END");
     }
-
 
 
     public void tryToSeed() {
@@ -68,8 +61,8 @@ public class SeedData implements CommandLineRunner {
             Player red = seedPlayerData.makeRed();
             Player blue = seedPlayerData.makeBlue();
             try {
-                seedBattleData.makeBattle(red, blue);
-                seedBattleData.makeBattle(red, blue);
+//                seedBattleData.makeBattle(red, blue);
+//                seedBattleData.makeBattle(red, blue);
             } catch (Exception e) {
                 log.warn("--BATTLE EXCEPTION--", e);
                 IBattleService.deleteAll();

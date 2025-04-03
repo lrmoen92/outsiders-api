@@ -2,9 +2,7 @@ package slogan.motion.outsidersapi.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -15,8 +13,6 @@ import java.util.Map;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Effect extends JsonObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,16 +29,6 @@ public class Effect extends JsonObject {
     protected boolean conditional = false;
     protected boolean visible = true;
     protected boolean stacks = false;
-
-    // used to identify an effect within the context of a battle
-    // set during battle logic (random number i guess, just not negative)
-    private int instanceId;
-    // set during battle logic for groups of effects (random number i guess, just
-    // not negative)
-    private int groupId;
-    // only for effects on character instances (should be position based)
-    private int originCharacter;
-    private int targetCharacter;
 
     // TODO: list of conditions, list of qualities....  yeah it's ultimately better can't deny it.
     // conditional string to meet
@@ -76,13 +62,10 @@ public class Effect extends JsonObject {
     public Effect(Effect e) {
         this.duration = e.duration;
         this.avatarUrl = e.avatarUrl;
-        this.instanceId = e.instanceId;
         this.name = e.name;
         this.condition = e.condition;
         this.quality = e.quality;
         this.description = e.description;
-        this.originCharacter = e.originCharacter;
-        this.targetCharacter = e.targetCharacter;
         this.interruptable = e.interruptable;
         this.physical = e.physical;
         this.magical = e.magical;
@@ -93,6 +76,11 @@ public class Effect extends JsonObject {
         this.statMods = new HashMap<>();
         this.statMods.putAll(e.getStatMods());
     }
+
+    public Effect() {
+
+    }
+
     public void triggerAndRevealCounter(Ability abilityCountered) {
         this.setVisible(true);
         this.setDuration(995);

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OutsidersApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OutsidersApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OutsidersApiApplication.class, args);
+    }
 
 }

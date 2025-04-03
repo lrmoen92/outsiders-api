@@ -2,15 +2,14 @@ package slogan.motion.outsidersapi.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import slogan.motion.outsidersapi.domain.constant.Energy;
 import slogan.motion.outsidersapi.domain.constant.Quality;
 import slogan.motion.outsidersapi.domain.constant.Stat;
+import slogan.motion.outsidersapi.domain.jpa.effects.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +19,7 @@ import java.util.Map;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+//@Immutable
 public class Ability extends JsonObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,74 +41,82 @@ public class Ability extends JsonObject {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<String> cost = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
-    private List<Effect> selfEffects = new ArrayList<>();
 
-    public void addSelfEffect(Effect b) {
+    // TODO: all effects should be in one map by type if possible
+    // ir implement child classes? List<SelfEffect> etc...
+    // or a list with filtering on a field...
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
+    private List<SelfEffect> selfEffects = new ArrayList<>();
+
+    public Ability() {
+
+    }
+
+    public void addSelfEffect(SelfEffect b) {
         selfEffects.add(b);
         b.setAbility(this);
     }
 
-    public void removeSelfEffect(Effect b) {
+    public void removeSelfEffect(SelfEffect b) {
         b.setAbility(null);
         selfEffects.remove(b);
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
-    private List<Effect> enemyEffects = new ArrayList<>();
+    private List<EnemyEffect> enemyEffects = new ArrayList<>();
 
-    public void addEnemyEffect(Effect b) {
+    public void addEnemyEffect(EnemyEffect b) {
         enemyEffects.add(b);
         b.setAbility(this);
     }
 
-    public void removeEnemyEffect(Effect b) {
+    public void removeEnemyEffect(EnemyEffect b) {
         b.setAbility(null);
         enemyEffects.remove(b);
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
-    private List<Effect> aoeEnemyEffects = new ArrayList<>();
+    private List<AoeEnemyEffect> aoeEnemyEffects = new ArrayList<>();
 
-    public void addAoeEnemyEffect(Effect b) {
+    public void addAoeEnemyEffect(AoeEnemyEffect b) {
         aoeEnemyEffects.add(b);
         b.setAbility(this);
     }
 
-    public void removeAoeEnemyEffect(Effect b) {
+    public void removeAoeEnemyEffect(AoeEnemyEffect b) {
         b.setAbility(null);
         aoeEnemyEffects.remove(b);
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
-    private List<Effect> allyEffects = new ArrayList<>();
+    private List<AllyEffect> allyEffects = new ArrayList<>();
 
-    public void addAllyEffect(Effect b) {
+    public void addAllyEffect(AllyEffect b) {
         allyEffects.add(b);
         b.setAbility(this);
     }
 
-    public void removeAllyEffect(Effect b) {
+    public void removeAllyEffect(AllyEffect b) {
         b.setAbility(null);
         allyEffects.remove(b);
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Ability")
-    private List<Effect> aoeAllyEffects = new ArrayList<>();
+    private List<AoeAllyEffect> aoeAllyEffects = new ArrayList<>();
 
-    public void addAoeAllyEffect(Effect b) {
+    public void addAoeAllyEffect(AoeAllyEffect b) {
         aoeAllyEffects.add(b);
         b.setAbility(this);
     }
 
-    public void removeAoeAllyEffect(Effect b) {
+    public void removeAoeAllyEffect(AoeAllyEffect b) {
         b.setAbility(null);
         aoeAllyEffects.remove(b);
     }
 
-    @ManyToOne
+    @ManyToMany(mappedBy = "abilities")
     @JsonIgnore
-    private Character Character;
+    private List<Character> characters = new ArrayList<>();
 
     public Ability(boolean enemies, boolean allies, boolean self, boolean aoe) {
         this.enemy = enemies;
@@ -139,7 +145,6 @@ public class Ability extends JsonObject {
                 ran++;
             }
         }
-        ;
 
         if (div > 0) {
             sb.append(div);

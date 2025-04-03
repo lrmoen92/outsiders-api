@@ -11,17 +11,15 @@ import slogan.motion.outsidersapi.handler.GlobalSocketHandler;
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig
-  implements WebSocketConfigurer
-{
-  @Autowired
-  private BattleSocketHandler battleSocketHandler;
-  @Autowired
-  private GlobalSocketHandler globalSocketHandler;
-  
-  public void registerWebSocketHandlers(WebSocketHandlerRegistry registry)
-  {
-    registry.addHandler(battleSocketHandler, "/arena/{arenaId}").setAllowedOrigins("*");
-    registry.addHandler(globalSocketHandler, "/chat").setAllowedOrigins("*");
-  }
- 
+        implements WebSocketConfigurer {
+    @Autowired
+    private BattleSocketHandler battleSocketHandler;
+    @Autowired
+    private GlobalSocketHandler globalSocketHandler;
+
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(battleSocketHandler, "/arena/{arenaId}").setAllowedOrigins("*");
+        registry.addHandler(globalSocketHandler, "/chat").setAllowedOrigins("*");
+    }
+
 }

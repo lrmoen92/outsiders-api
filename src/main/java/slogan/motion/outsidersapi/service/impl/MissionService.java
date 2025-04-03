@@ -30,7 +30,7 @@ public class MissionService implements IMissionService {
             Optional<Mission> mission = repo.findByName(entity.getName());
             return mission.orElseGet(() -> {
                 Mission savedMission = repo.save(entity);
-                log.info("Saved new Mission: {}", savedMission);
+                log.info("------==SAVE |MIS:{}", savedMission);
                 return savedMission;
             });
         } else {

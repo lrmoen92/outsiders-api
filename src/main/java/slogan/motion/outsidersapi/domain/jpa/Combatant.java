@@ -2,21 +2,19 @@ package slogan.motion.outsidersapi.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import slogan.motion.outsidersapi.domain.jpa.effects.BattleEffect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Combatant extends Character {
 
     private int characterId;
@@ -41,16 +39,50 @@ public class Combatant extends Character {
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Combatant", orphanRemoval = true)
-    private List<Effect> Effects = new ArrayList<>();
+    private List<BattleEffect> Effects = new ArrayList<>();
 
-    public void addIEffect(Effect b) {
+    public void addIEffect(BattleEffect b) {
         Effects.add(b);
         b.setCombatant(this);
     }
 
-    public void removeIEffect(Effect b) {
+    public void removeIEffect(BattleEffect b) {
         b.setCombatant(null);
         Effects.remove(b);
+    }
+
+    public void clearEffects() {
+        Effects.forEach(this::removeIEffect);
+    }
+
+    public String getShorgthand() {
+        return "Combatant{" +
+                ", name=" + name +
+                ", hp=" + hp +
+                ", dead=" + dead +
+                ", position=" + position +
+                ", cooldowns=" + cooldowns +
+                ", flags=" + flags +
+                ", Effects=" + Effects.stream().map(BattleEffect::getShorthand).collect(Collectors.joining(", ")) +
+                '}';
+    }
+
+    public void setHp(int hp) {
+        if (!this.isDead()) {
+            if (hp > 100) {
+                this.hp = 100;
+            } else if (hp <= 0) {
+                this.hp = 0;
+                this.setDead(true);
+            } else {
+                this.hp = hp;
+            }
+        }
+
+    }
+
+    public Combatant() {
+
     }
 
     public Combatant(Character input, int position) {

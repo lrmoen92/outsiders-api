@@ -6,16 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import slogan.motion.outsidersapi.domain.jpa.JsonObject;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CostCheckDTO extends JsonObject {
+public class ChatDTO extends JsonObject {
 
-    private List<TargetCheckDTO> chosenAbilities;
-    private List<List<String>> allyCosts;
-    private List<String> spentEnergy;
-
+    public String timestamp;
+    public String name;
+    public String message;
+    public String avatarUrl;
 }

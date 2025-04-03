@@ -2,9 +2,7 @@ package slogan.motion.outsidersapi.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -17,8 +15,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Player extends JsonObject {
 
     @Id
@@ -36,6 +32,7 @@ public class Player extends JsonObject {
     @Column(unique = true)
     private String displayName;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private PlayerCredentials credentials;
     // mission id, current amount (as opposed to total amount needed)
@@ -61,16 +58,18 @@ public class Player extends JsonObject {
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<Integer> characterIdsUnlocked;
 
+    @JsonIgnore
     @MapKeyColumn(name = "type")
     @Column(name = "amount")
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private Map<String, Integer> playerEnergy;
 
+    @JsonIgnore
+    @OrderBy("position")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "Player", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Combatant> Combatants = new ArrayList<>();
 
-    // TODO: remove persist?
     @ManyToOne
     @JsonIgnore
     private Battle Battle;
@@ -84,9 +83,29 @@ public class Player extends JsonObject {
         a.setPlayer(this);
     }
 
+    public void removeICombatants() {
+        Combatants.forEach(combatant -> {
+            combatant.setPlayer(null);
+            combatant.getAbilities().forEach(a -> {
+                        a.setCharacters(null);
+                    }
+            );
+        });
+        Combatants.clear();
+    }
+
     public void removeICombatant(Combatant a) {
         a.setPlayer(null);
         Combatants.remove(a);
+    }
+
+
+    public String getShorthand() {
+        return "Player{" +
+                "id=" + id +
+                ", level=" + level +
+                ", displayName='" + displayName + '\'' +
+                '}';
     }
 
 
@@ -157,14 +176,5 @@ public class Player extends JsonObject {
             return this.gainXP(20);
             // reward moderate xp
         }
-    }
-
-    public String getShorthand() {
-        return this.displayName +
-                " | id: (" +
-                this.id +
-                ") | LVL: "+ this.level +" | (" +
-                this.xp +
-                "/100)";
     }
 }

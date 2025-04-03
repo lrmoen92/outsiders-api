@@ -26,30 +26,30 @@ public class Character extends JsonObject {
     @Column(insertable = false, updatable = false)
     private String charType;
 
-    private String avatarUrl;
-    private String name;
-    private String description;
+    protected String avatarUrl;
+    protected String name;
+    protected String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "Character", fetch = FetchType.EAGER)
-    private List<Ability> IAbilities = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    protected List<Ability> abilities = new ArrayList<>();
 
-    public void addIAbilities(List<Ability> input) {
-        input.forEach(this::addIAbility);
+    public void addAbilities(List<Ability> input) {
+        input.forEach(this::addAbility);
     }
 
-    public void addIAbility(Ability g) {
-        IAbilities.add(g);
-        g.setCharacter(this);
+    public void addAbility(Ability g) {
+        abilities.add(g);
+        g.getCharacters().add(this);
     }
 
-    public void removeIAbility(Ability g) {
-        g.setCharacter(null);
-        IAbilities.remove(g);
+    public void removeAbility(Ability g) {
+        g.getCharacters().remove(this);
+        abilities.remove(g);
     }
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<String> factions = new ArrayList<>();
+    protected List<String> factions = new ArrayList<>();
 
     public String getShorthand() {
         return this.name +
@@ -65,7 +65,8 @@ public class Character extends JsonObject {
         this.name = input.getName();
         this.description = input.getDescription();
         this.factions = input.getFactions();
-        this.addIAbilities(input.getIAbilities());
+        // bug is here?
+        this.addAbilities(input.getAbilities());
     }
 
     public Character(String avatarUrl, String name, String description, List<String> factions) {

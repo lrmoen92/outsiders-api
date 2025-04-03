@@ -1,6 +1,5 @@
 package slogan.motion.outsidersapi.domain.dto;
 
-import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -10,10 +10,9 @@ import slogan.motion.outsidersapi.domain.jpa.PlayerCredentials;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayerMessage
-{
-  private String name;
-  private PlayerCredentials credentials;
-  private String avatar;
-  
+public class PlayerMessage {
+    private String name;
+    private PlayerCredentials credentials;
+    private String avatar;
+
 }

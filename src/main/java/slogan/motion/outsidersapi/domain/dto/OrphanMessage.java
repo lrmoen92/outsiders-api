@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrphanMessage
-{
-  private int playerId;
-  private int arenaId;
-  
+public class OrphanMessage {
+    private int playerId;
+    private int arenaId;
+
 }

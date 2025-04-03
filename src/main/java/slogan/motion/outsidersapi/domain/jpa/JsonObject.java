@@ -1,9 +1,10 @@
 package slogan.motion.outsidersapi.domain.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class JsonObject {
 
     public String json() {

@@ -2,9 +2,7 @@ package slogan.motion.outsidersapi.domain.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -13,8 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MissionProgress extends JsonObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +25,11 @@ public class MissionProgress extends JsonObject {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "MissionProgress", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<MissionRequirement> requirements = new ArrayList<>();
+
+    public MissionProgress() {
+
+    }
+
     public void addIMissionRequirement(MissionRequirement g) {
         requirements.add(g);
         g.setMissionProgress(this);

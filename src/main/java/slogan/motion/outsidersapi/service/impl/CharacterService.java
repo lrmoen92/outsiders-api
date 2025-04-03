@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import slogan.motion.outsidersapi.domain.jpa.Character;
-import slogan.motion.outsidersapi.domain.jpa.Player;
 import slogan.motion.outsidersapi.repository.CharacterRepository;
 import slogan.motion.outsidersapi.service.ICharacterService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,10 +26,9 @@ public class CharacterService implements ICharacterService {
         if (paramCharacter.getId() == 0) {
             // save only if it doesn't exist
             List<Character> character = characterRepository.findAllByName(paramCharacter.getName());
-            log.info("");
             if (character.isEmpty()) {
                 Character savedChar = characterRepository.save(paramCharacter);
-                log.info("Saved new Character: {}", savedChar);
+                log.info("------==SAVE |CHA:{}", savedChar);
                 return savedChar;
             } else {
                 return paramCharacter;

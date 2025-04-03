@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Mapper {
     @Bean
-    ObjectMapper objectMapper(){
+    ObjectMapper objectMapper() {
         return new ObjectMapper().setDefaultPrettyPrinter(new DefaultPrettyPrinter());
     }
 }

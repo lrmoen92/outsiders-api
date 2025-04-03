@@ -7,6 +7,7 @@ import java.util.List;
 public interface ICharacterService {
 
     void deleteAll();
+
     Character create(Character paramCharacter);
 
     Character findById(Integer paramInteger);

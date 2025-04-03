@@ -1,20 +1,19 @@
 package slogan.motion.outsidersapi.bootstrap;
 
-import com.google.gson.Gson;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import slogan.motion.outsidersapi.domain.jpa.*;
-import slogan.motion.outsidersapi.service.*;
+import slogan.motion.outsidersapi.domain.jpa.Battle;
+import slogan.motion.outsidersapi.domain.jpa.Combatant;
+import slogan.motion.outsidersapi.domain.jpa.Player;
+import slogan.motion.outsidersapi.service.IBattleService;
+import slogan.motion.outsidersapi.service.ICharacterService;
 import slogan.motion.outsidersapi.util.NRG;
 
 import java.util.List;
 
 @Component
 public class SeedBattleData {
-    private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     @Autowired
     private IBattleService IBattleService;
     @Autowired
@@ -26,6 +25,7 @@ public class SeedBattleData {
         IBattleService.deleteAll();
     }
 
+    // TODO: DONT USE THIS UNTIL IT'S BEEN MATCHED TO DATA CONTROLLER
     @Transactional
     protected String makeBattle(Player red, Player blue) {
         int arenaId = 1;
@@ -48,7 +48,7 @@ public class SeedBattleData {
             i1.setPosition(0);
             i2.setPosition(1);
             i3.setPosition(2);
-            red.addICombatants(List.of(i1,i2,i3));
+            red.addICombatants(List.of(i1, i2, i3));
             battle.setPlayerOne(red);
 
             Battle savedBattle = this.IBattleService.save(battle);
@@ -64,7 +64,7 @@ public class SeedBattleData {
             i1.setPosition(3);
             i2.setPosition(4);
             i3.setPosition(5);
-            blue.addICombatants(List.of(i1,i2,i3));
+            blue.addICombatants(List.of(i1, i2, i3));
             battle.setPlayerTwo(blue);
 
             if (battle.isPlayerOneStart()) {
@@ -79,7 +79,7 @@ public class SeedBattleData {
             Battle savedBattle = this.IBattleService.save(battle);
             String battleJson = savedBattle.json();
 
-            if (battleJson != null ) {
+            if (battleJson != null) {
                 return "{\"type\": \"INIT\", \"battle\": " + battleJson + "}";
             } else {
                 // TODO: Improve error payload
